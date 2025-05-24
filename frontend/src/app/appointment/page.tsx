@@ -126,7 +126,7 @@ export default function AppointmentPage() {
                     }
                 }, 1500);
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error('Booking error:', error);
             toast.error(error.response?.data?.message || 'Booking failed. Please try again.', {
                 autoClose: 3000
