@@ -133,7 +133,7 @@ export default function Contact() {
                 
                 {submitted && (
                     <div className="mt-6 p-4 bg-green-100 text-green-700 rounded-lg text-center">
-                        Message sent successfully! We'll get back to you soon.
+                        Message sent successfully! We&apos;ll get back to you soon.
                     </div>
                 )}
                 

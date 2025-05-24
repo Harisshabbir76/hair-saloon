@@ -38,7 +38,7 @@ export default function AboutUs() {
             
             <p className="text-lg mb-6 leading-relaxed">
               Welcome to <span className="font-semibold text-pink-600">Salon</span>, where beauty meets expertise. 
-              Founded in 2010, we've been transforming hair into works of art for both 
+              Founded in 2010, we have been transforming hair into works of art for both 
               men and women in a luxurious, welcoming environment.
             </p>
             

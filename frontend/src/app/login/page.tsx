@@ -3,7 +3,7 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
+import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
 
 export default function Login() {
     const [email, setEmail] = useState('')
@@ -187,7 +187,7 @@ export default function Login() {
 
                     <div className="mt-6 text-center">
                         <p className="text-gray-600">
-                            Don't have an account?{' '}
+                            Don&apos;t have an account?{' '}
                             <button
                                 onClick={() => router.push('/signup')}
                                 className="text-pink-600 font-medium hover:underline focus:outline-none"

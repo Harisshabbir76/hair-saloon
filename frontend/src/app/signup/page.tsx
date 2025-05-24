@@ -61,7 +61,7 @@ export default function Signup() {
             }
         }
         catch(err){
-            seterror('Something went wrong')
+            seterror(err)
             setloading(false)
         }
     }
