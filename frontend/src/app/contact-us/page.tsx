@@ -19,14 +19,12 @@ export default function Contact() {
         setError('')
         setSubmitted(false)
         
-        // Basic validation
         if (!name || !email || !message) {
             setError('All fields are required')
             setLoading(false)
             return
         }
 
-        // Email validation
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             setError('Please enter a valid email address')
             setLoading(false)
@@ -63,16 +61,13 @@ export default function Contact() {
 
     return (
         <div className="bg-gradient-to-br from-[#ffb8d5] via-[#ffd6e7] to-[#ffe8f0]">
-            {/* Hero Section */}
             <div className="h-64 flex items-center justify-center bg-pink-600/10">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-800">Contact Us</h1>
             </div>
 
-            {/* Contact Info Section */}
             <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-8 mb-16">
                     <div className="flex flex-col md:flex-row justify-between items-center">
-                        {/* Left Side - Address & Phone */}
                         <div className="mb-6 md:mb-0 space-y-4">
                             <div className="flex items-center space-x-3">
                                 <FaMapMarkerAlt className="text-pink-600 text-2xl" />
@@ -90,7 +85,6 @@ export default function Contact() {
                             </div>
                         </div>
                         
-                        {/* Right Side - Social Media */}
                         <div className="flex space-x-6">
                             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
                                className="text-pink-600 hover:text-pink-800 transition-colors">
@@ -104,7 +98,6 @@ export default function Contact() {
                     </div>
                 </div>
 
-                {/* Map Section */}
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-4 mb-16 h-96">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215209132576!2d-73.98784492452562!3d40.74844047138969!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQ0JzU0LjQiTiA3M8KwNTknMTEuNiJX!5e0!3m2!1sen!2sus!4v1623862347218!5m2!1sen!2sus" 
@@ -114,10 +107,10 @@ export default function Contact() {
                         allowFullScreen="" 
                         loading="lazy"
                         className="rounded-lg"
+                        title="Salon Location Map"
                     ></iframe>
                 </div>
 
-                {/* Contact Form Section */}
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-8 max-w-2xl ml-auto">
                     <h2 className="text-2xl font-bold text-gray-800 mb-6">Send Us a Message</h2>
                     
@@ -158,7 +151,7 @@ export default function Contact() {
                             </label>
                             <textarea
                                 id="message"
-                                rows="4"
+                                rows={4}
                                 placeholder="Your message..."
                                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:border-pink-500 focus:ring-pink-500"
                                 value={message}
@@ -190,7 +183,7 @@ export default function Contact() {
                     
                     {submitted && (
                         <div className="mt-6 p-4 bg-green-100 text-green-700 rounded-lg text-center">
-                            Message sent successfully! We'll get back to you soon.
+                            Message sent successfully! We&apos;ll get back to you soon.
                         </div>
                     )}
                     

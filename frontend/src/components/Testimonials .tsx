@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import salonBackground from "../images/logo.jpeg"; // Make sure this path is correct
+import salonBackground from "../images/logo.jpeg";
 
 const testimonials = [
   {
@@ -12,7 +12,7 @@ const testimonials = [
   },
   {
     id: 2,
-    quote: "The best haircut I've ever had! The stylist really understood what I wanted.",
+    quote: "The best haircut I&apos;ve ever had! The stylist really understood what I wanted.",
     author: "Michael Johnson"
   },
   {
@@ -44,21 +44,19 @@ export default function Testimonials() {
 
   return (
     <section className="relative py-16 min-h-[500px]">
-      {/* Enhanced Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
           src={salonBackground}
           alt="Salon background"
           fill
-          className="object-cover brightness-105 contrast-105" // Enhanced intensity
+          className="object-cover brightness-105 contrast-105"
           quality={90}
           priority
           style={{
             objectPosition: "center",
-            filter: "saturate(1.1)" // Slightly increased saturation
+            filter: "saturate(1.1)"
           }}
         />
-        {/* Lighter overlay to show more background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#ffb8d5]/60 via-[#ffd6e7]/60 to-[#ffe8f0]/60"></div>
       </div>
       
@@ -75,10 +73,9 @@ export default function Testimonials() {
                 index === currentTestimonial ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              {/* Semi-transparent cards */}
               <div className="bg-white/60 backdrop-blur-md p-8 rounded-xl shadow-xl max-w-2xl mx-auto border border-white/30">
                 <p className="text-lg md:text-xl italic mb-6 text-gray-800">
-                  "{testimonial.quote}"
+                  &quot;{testimonial.quote}&quot;
                 </p>
                 <p className="font-semibold text-pink-600 drop-shadow-sm">
                   — {testimonial.author}
