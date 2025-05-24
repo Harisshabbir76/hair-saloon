@@ -126,14 +126,17 @@ export default function AppointmentPage() {
                     }
                 }, 1500);
             }
-        } catch (error) {
-            console.error('Booking error:', error);
-            toast.error(error.response?.data?.message || 'Booking failed. Please try again.', {
-                autoClose: 3000
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
+        } catch (error: unknown) {
+  if (axios.isAxiosError(error)) {
+    toast.error(error.response?.data?.message || 'Booking failed. Please try again.', {
+      autoClose: 3000
+    });
+  } else {
+    toast.error('Booking failed. Please try again.', {
+      autoClose: 3000
+    });
+  }
+}
     };
 
     return (
