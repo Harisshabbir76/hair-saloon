@@ -50,11 +50,15 @@ export default function Contact() {
             } else {
                 setError(res.data.message || 'Error sending message')
             }
-        } catch (err) {
-            setError(err.response?.data?.message || 
-                   err.response?.data?.error || 
-                   'Failed to send message. Please try again.')
-        } finally {
+        } catch (err: unknown) {
+  if (axios.isAxiosError(err)) {
+    setError(err.response?.data?.message || err.response?.data?.error || 'Failed to send message. Please try again.')
+  } else if (err instanceof Error) {
+    setError(err.message)
+  } else {
+    setError('Failed to send message. Please try again.')
+  }
+}finally {
             setLoading(false)
         }
     }
