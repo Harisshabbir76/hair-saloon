@@ -2,11 +2,26 @@
 import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+   interface Appointment {
+    name: string;
+    age: number;
+    gender: string;
+    phone: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    status: string;
+    services: string[];
+    payment: string;
+}
 
 export default function ConfirmationPage() {
+ 
+
     const router = useRouter();
-    const { id } = useParams();
-    const [appointment, setAppointment] = useState(null);
+    const params = useParams();
+    const id = params?.id as string;
+    const [appointment, setAppointment] = useState<Appointment | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
