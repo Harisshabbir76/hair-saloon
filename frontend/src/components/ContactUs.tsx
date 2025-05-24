@@ -11,7 +11,7 @@ export default function Contact() {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const handleContact = async (e) => {
+    const handleContact = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setLoading(true)
         setError('')

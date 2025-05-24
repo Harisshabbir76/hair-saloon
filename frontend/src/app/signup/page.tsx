@@ -18,7 +18,7 @@ export default function Signup() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const router = useRouter()
 
-    const handleSignup = async (e) => {
+    const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setloading(true)
         seterror('')
