@@ -18,7 +18,7 @@ export default function AppointmentPage() {
         phone: '',
         payment: 'cash'
     });
-    const [availableServices, setAvailableServices] = useState([]);
+    const [availableServices, setAvailableServices] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
     const [isSuccess, setIsSuccess] = useState(false);
