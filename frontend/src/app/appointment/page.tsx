@@ -1,13 +1,31 @@
-"use client"
+"use client";
+
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+interface FormData {
+    name: string;
+    age: string;
+    gender: string;
+    services: string[];
+    date: string;
+    startTime: string;
+    endTime: string;
+    phone: string;
+    payment: string;
+}
+
+interface Errors {
+    [key: string]: string;
+}
+
 export default function AppointmentPage() {
     const router = useRouter();
-    const [formData, setFormData] = useState({
+
+    const [formData, setFormData] = useState<FormData>({
         name: '',
         age: '',
         gender: '',
@@ -18,9 +36,10 @@ export default function AppointmentPage() {
         phone: '',
         payment: 'cash'
     });
+
     const [availableServices, setAvailableServices] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<Errors>({});
     const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
@@ -39,26 +58,27 @@ export default function AppointmentPage() {
         } else {
             setAvailableServices([]);
         }
+
         setFormData(prev => ({ ...prev, services: [] }));
     }, [formData.gender]);
 
     const validateForm = () => {
-        const newErrors = {};
-        
+        const newErrors: Errors = {};
+
         if (!formData.name.trim()) newErrors.name = 'Name is required';
-        if (!formData.age || formData.age < 1) newErrors.age = 'Valid age is required';
+        if (!formData.age || parseInt(formData.age) < 1) newErrors.age = 'Valid age is required';
         if (!formData.gender) newErrors.gender = 'Gender is required';
         if (!formData.phone || !/^\d{10}$/.test(formData.phone)) newErrors.phone = 'Valid 10-digit phone number is required';
         if (!formData.date) newErrors.date = 'Date is required';
         if (!formData.startTime) newErrors.startTime = 'Start time is required';
         if (!formData.endTime) newErrors.endTime = 'End time is required';
         if (formData.services.length === 0) newErrors.services = 'At least one service is required';
-        
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
@@ -66,7 +86,7 @@ export default function AppointmentPage() {
         }));
     };
 
-    const handleServiceToggle = (service) => {
+    const handleServiceToggle = (service: string) => {
         setFormData(prev => ({
             ...prev,
             services: prev.services.includes(service)
@@ -75,21 +95,21 @@ export default function AppointmentPage() {
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) return;
-        
+
         setIsSubmitting(true);
-        
+
         try {
             const response = await axios.post('http://localhost:5000/appointment', {
                 ...formData,
                 age: Number(formData.age)
             }, {
-                timeout: 5000 // Set timeout to 5 seconds
+                timeout: 5000
             });
-            
+
             if (response.data.success) {
                 setIsSuccess(true);
                 toast.success('Appointment booked successfully!', {
@@ -97,18 +117,16 @@ export default function AppointmentPage() {
                     autoClose: 1000,
                     hideProgressBar: true,
                 });
-                
-                // Immediate redirect with optimistic UI
+
                 router.push(`/appointment/confirmation/${response.data.appointment._id}`);
-                
-                // Fallback in case redirect fails
+
                 setTimeout(() => {
-                    if (!document.hidden) { // If page is still visible
+                    if (!document.hidden) {
                         router.push(`/appointment/confirmation/${response.data.appointment._id}`);
                     }
                 }, 1500);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Booking error:', error);
             toast.error(error.response?.data?.message || 'Booking failed. Please try again.', {
                 autoClose: 3000
@@ -134,10 +152,10 @@ export default function AppointmentPage() {
                     </div>
                 </div>
             )}
-            
+
             <h1 className="text-2xl font-bold mb-6">Book Appointment</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Personal Information */}
+                {/* Personal Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block mb-1 font-medium">Full Name*</label>
@@ -150,7 +168,7 @@ export default function AppointmentPage() {
                         />
                         {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                     </div>
-                    
+
                     <div>
                         <label className="block mb-1 font-medium">Age*</label>
                         <input
@@ -181,7 +199,7 @@ export default function AppointmentPage() {
                         </select>
                         {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
                     </div>
-                    
+
                     <div>
                         <label className="block mb-1 font-medium">Phone Number*</label>
                         <input
@@ -196,7 +214,7 @@ export default function AppointmentPage() {
                     </div>
                 </div>
 
-                {/* Services Section */}
+                {/* Services */}
                 <div>
                     <label className="block mb-1 font-medium">Services*</label>
                     {errors.services && <p className="text-red-500 text-sm mb-2">{errors.services}</p>}
@@ -215,7 +233,7 @@ export default function AppointmentPage() {
                     </div>
                 </div>
 
-                {/* Appointment Timing */}
+                {/* Date & Time */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label className="block mb-1 font-medium">Date*</label>
@@ -229,7 +247,7 @@ export default function AppointmentPage() {
                         />
                         {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
                     </div>
-                    
+
                     <div>
                         <label className="block mb-1 font-medium">Start Time*</label>
                         <input
@@ -241,7 +259,7 @@ export default function AppointmentPage() {
                         />
                         {errors.startTime && <p className="text-red-500 text-sm mt-1">{errors.startTime}</p>}
                     </div>
-                    
+
                     <div>
                         <label className="block mb-1 font-medium">End Time*</label>
                         <input
@@ -255,7 +273,7 @@ export default function AppointmentPage() {
                     </div>
                 </div>
 
-                {/* Payment Method */}
+                {/* Payment */}
                 <div>
                     <label className="block mb-1 font-medium">Payment Method*</label>
                     <select
@@ -268,7 +286,7 @@ export default function AppointmentPage() {
                     </select>
                 </div>
 
-                {/* Submit Button */}
+                {/* Submit */}
                 <button
                     type="submit"
                     disabled={isSubmitting}
@@ -277,8 +295,8 @@ export default function AppointmentPage() {
                     {isSubmitting ? (
                         <span className="flex items-center justify-center">
                             <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                             </svg>
                             Processing...
                         </span>
