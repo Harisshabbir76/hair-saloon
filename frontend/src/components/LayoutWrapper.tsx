@@ -11,7 +11,9 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const hideNavbarFooter = ["/login", "/signup", "/404"].includes(pathname);
+  const hideNavbarFooter = 
+    ["/login", "/signup"].includes(pathname) || 
+    pathname?.startsWith("/404");
 
   return (
     <>
