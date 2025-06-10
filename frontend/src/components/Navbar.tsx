@@ -20,7 +20,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:5000/logout');
+      await axios.get('hair-saloon-production.up.railway.app/logout');
       if (typeof window !== 'undefined') {
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');

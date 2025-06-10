@@ -28,7 +28,7 @@ export default function ConfirmationPage() {
     useEffect(() => {
         const fetchAppointment = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/appointment/${id}`);
+                const response = await axios.get(`hair-saloon-production.up.railway.app/appointment/${id}`);
                 if (response.data.success) {
                     setAppointment(response.data.appointment);
                 } else {

@@ -59,7 +59,7 @@ export default function Login() {
         }
 
         try {
-            const res = await axios.post<LoginResponse>('http://localhost:5000/login', {
+            const res = await axios.post<LoginResponse>('hair-saloon-production.up.railway.app/login', {
                 email,
                 password
             }, {
