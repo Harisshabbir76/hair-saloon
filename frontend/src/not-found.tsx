@@ -1,6 +1,6 @@
 "use client"
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation' // Updated import for Next.js 13+
+import { useRouter } from 'next/navigation'
 
 export default function NotFound() {
   const router = useRouter()
@@ -17,7 +17,7 @@ export default function NotFound() {
       <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg max-w-md mx-4">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">404 - Page Not Found</h1>
         <p className="text-lg text-gray-600 mb-6">
-          The page you're looking for doesn't exist.
+          The page you&apos;re looking for doesn&apos;t exist.
         </p>
         <div className="animate-pulse text-blue-600">
           Redirecting to home page...
