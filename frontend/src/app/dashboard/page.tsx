@@ -62,7 +62,7 @@ export default function DashboardPage() {
         if (error instanceof Error && error.message === 'Unauthorized access') {
           router.replace('/404');
         } else {
-          router.replace('/login');
+          router.replace('/404');
         }
       }
     };
