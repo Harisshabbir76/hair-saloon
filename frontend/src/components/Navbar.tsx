@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import PopupNotification from './PopupNotification'
 
 export default function Navbar() {
@@ -11,7 +10,7 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
-  const router = useRouter();
+
 
   // Check if user is logged in after component mounts
   useEffect(() => {
