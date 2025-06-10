@@ -4,6 +4,7 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
+import PopupNotification from './PopupNotification'
 
 interface AxiosError {
     response?: {
@@ -24,7 +25,6 @@ interface LoginResponse {
         id: string;
         email: string;
         name: string;
-        // Add other user properties as needed
     };
 }
 
@@ -33,9 +33,9 @@ export default function Login() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    const [success, setSuccess] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [rememberMe, setRememberMe] = useState(false)
+    const [showPopup, setShowPopup] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -50,7 +50,6 @@ export default function Login() {
         e.preventDefault()
         setLoading(true)
         setError('')
-        setSuccess(false)
         
         if (!email || !password) {
             setError('Please fill in all fields')
@@ -70,7 +69,7 @@ export default function Login() {
             })
             
             if (res.data.success) {
-                setSuccess(true)
+                setShowPopup(true)
                 
                 if (rememberMe) {
                     localStorage.setItem('rememberedemail', email)
@@ -80,10 +79,6 @@ export default function Login() {
 
                 localStorage.setItem('authToken', res.data.token)
                 localStorage.setItem('user', JSON.stringify(res.data.user))
-                
-                setTimeout(() => {
-                    router.push('/')
-                }, 1000)
             }
         } catch (err: unknown) {
             const error = err as AxiosError
@@ -103,6 +98,12 @@ export default function Login() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#ffb8d5] via-[#ffd6e7] to-[#ffe8f0] flex items-center justify-center p-4">
+            <PopupNotification 
+                isOpen={showPopup} 
+                onClose={() => setShowPopup(false)}
+                type="login"
+            />
+            
             <div className="w-full max-w-md bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-white/30">
                 <div className="p-8">
                     <div className="text-center mb-8">
@@ -113,11 +114,6 @@ export default function Login() {
                     {error && (
                         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
                             {error}
-                        </div>
-                    )}
-                    {success && (
-                        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm">
-                            Login successful! Redirecting...
                         </div>
                     )}
 

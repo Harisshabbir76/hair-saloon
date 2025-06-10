@@ -4,29 +4,45 @@ import axios, { AxiosError } from 'axios'
 import React, { useState } from 'react'
 import { FaInstagram, FaFacebook, FaPhone, FaMapMarkerAlt } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Contact() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState('')
-    const [submitted, setSubmitted] = useState(false)
-    const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
     const handleContact = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setLoading(true)
-        setError('')
-        setSubmitted(false)
         
         if (!name || !email || !message) {
-            setError('All fields are required')
+            toast.error('All fields are required', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            })
             setLoading(false)
             return
         }
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError('Please enter a valid email address')
+            toast.error('Please enter a valid email address', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            })
             setLoading(false)
             return
         }
@@ -43,25 +59,52 @@ export default function Contact() {
             })
             
             if (res.data.success) {
-                setSubmitted(true)
+                toast.success('Message sent successfully! We\'ll get back to you soon.', {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                })
                 setName('')
                 setEmail('')
                 setMessage('')
             } else {
-                setError(res.data.message || 'Error sending message')
+                toast.error(res.data.message || 'Error sending message', {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                })
             }
         } catch (err) {
+            let errorMessage = 'Failed to send message. Please try again.'
+            
             if (err instanceof AxiosError) {
-                setError(
-                    err.response?.data?.message || 
-                    err.response?.data?.error || 
-                    'Failed to send message. Please try again.'
-                )
+                errorMessage = err.response?.data?.message || 
+                               err.response?.data?.error || 
+                               errorMessage
             } else if (err instanceof Error) {
-                setError(err.message)
-            } else {
-                setError('Failed to send message. Please try again.')
+                errorMessage = err.message
             }
+
+            toast.error(errorMessage, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            })
         } finally {
             setLoading(false)
         }
@@ -69,6 +112,20 @@ export default function Contact() {
 
     return (
         <div className="bg-gradient-to-br from-[#ffb8d5] via-[#ffd6e7] to-[#ffe8f0]">
+            {/* Toast Container should be near the root of your component */}
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+
             <div className="h-64 flex items-center justify-center bg-pink-600/10">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-800">Contact Us</h1>
             </div>
@@ -188,18 +245,6 @@ export default function Contact() {
                             </button>
                         </div>
                     </form>
-                    
-                    {submitted && (
-                        <div className="mt-6 p-4 bg-green-100 text-green-700 rounded-lg text-center">
-                            Message sent successfully! We&apos;ll get back to you soon.
-                        </div>
-                    )}
-                    
-                    {error && (
-                        <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg text-center">
-                            {error}
-                        </div>
-                    )}
                 </div>
             </div>
         </div>

@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import PopupNotification from './PopupNotification'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const router = useRouter();
 
   // Check if user is logged in after component mounts
@@ -26,7 +28,7 @@ export default function Navbar() {
         localStorage.removeItem('user');
       }
       setIsLoggedIn(false);
-      router.push('/');
+      setShowLogoutPopup(true);
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -34,6 +36,12 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gradient-to-r from-[#ffb8d5] via-[#ffd6e7] to-[#ffe8f0] shadow-lg">
+      <PopupNotification 
+        isOpen={showLogoutPopup} 
+        onClose={() => setShowLogoutPopup(false)}
+        type="logout"
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
