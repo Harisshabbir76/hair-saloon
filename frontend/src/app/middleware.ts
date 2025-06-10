@@ -29,7 +29,8 @@ export async function middleware(request: NextRequest) {
       headers.set('x-user-role', 'admin');
       
       return NextResponse.next({ request: { headers } });
-    } catch (error) {
+    } catch {
+      // Removed unused error parameter
       const response = NextResponse.redirect(new URL('/login', request.url));
       response.cookies.delete('token');
       return response;
