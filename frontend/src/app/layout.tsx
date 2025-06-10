@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans, GeistMono } from "geist/font";
 import "./globals.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { usePathname } from "next/navigation";
+import LayoutWrapper from "../components/LayoutWrapper";
 
 export const metadata: Metadata = {
   title: "Salon - Your Beauty, Our Duty",
@@ -15,15 +13,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const hideNavbarFooter = ["/login", "/signup", "/404"].includes(pathname);
-
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="antialiased flex flex-col min-h-screen">
-        {!hideNavbarFooter && <Navbar />}
-        <main className="flex-grow">{children}</main>
-        {!hideNavbarFooter && <Footer />}
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
