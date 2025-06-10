@@ -11,8 +11,8 @@ export default function LayoutWrapper({
 }) {
   const pathname = usePathname();
 
-  const hideNavbarFooter =
-    ["/login", "/signup"].includes(pathname) || pathname === "/404";
+  const hideNavbarFooter = ["/login", "/signup", "/not-found"].includes(pathname);
+
 
   return (
     <>
