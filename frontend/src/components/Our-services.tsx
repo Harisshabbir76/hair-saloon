@@ -32,10 +32,10 @@ export default function Services() {
           Our Services
         </h2>
         
-        <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-          {/* Men's Services - Left side on mobile and desktop */}
-          <div className="w-full md:w-1/2 bg-white/60 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-lg order-1 md:order-1">
-            <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-pink-600 text-center md:text-left">
+        <div className="flex flex-row gap-6 md:gap-12 overflow-x-auto pb-4">
+          {/* Men's Services - Left side */}
+          <div className="min-w-[280px] md:w-1/2 bg-white/60 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-lg">
+            <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-pink-600 text-center">
               For Men
             </h3>
             <ul className="space-y-3 md:space-y-4">
@@ -52,9 +52,9 @@ export default function Services() {
             </ul>
           </div>
 
-          {/* Women's Services - Right side on mobile and desktop */}
-          <div className="w-full md:w-1/2 bg-white/60 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-lg order-2 md:order-2">
-            <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-pink-600 text-center md:text-left">
+          {/* Women's Services - Right side */}
+          <div className="min-w-[280px] md:w-1/2 bg-white/60 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-lg">
+            <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-pink-600 text-center">
               For Women
             </h3>
             <ul className="space-y-3 md:space-y-4">
