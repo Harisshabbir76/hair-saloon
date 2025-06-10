@@ -103,7 +103,7 @@ export default function AppointmentPage() {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post('hair-saloon-production.up.railway.app/appointment', {
+            const response = await axios.post('https://hair-saloon-production.up.railway.app/appointment', {
                 ...formData,
                 age: Number(formData.age)
             }, {

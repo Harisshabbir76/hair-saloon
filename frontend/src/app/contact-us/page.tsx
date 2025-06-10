@@ -32,7 +32,7 @@ export default function Contact() {
         }
 
         try {
-            const res = await axios.post('hair-saloon-production.up.railway.app/contact', {
+            const res = await axios.post('https://hair-saloon-production.up.railway.app/contact', {
                 name,
                 email,
                 message

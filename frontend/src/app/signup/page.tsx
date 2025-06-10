@@ -62,7 +62,7 @@ export default function Signup() {
         }
         
         try {
-            const res = await axios.post<SignupResponse>('hair-saloon-production.up.railway.app/signup', {
+            const res = await axios.post<SignupResponse>('https://hair-saloon-production.up.railway.app/signup', {
                 name,
                 email,
                 age,
