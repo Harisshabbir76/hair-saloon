@@ -4,7 +4,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Spinner, Button } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 
 type ButtonVariant = 
   | 'primary'
@@ -25,8 +25,7 @@ interface DashboardButton {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [authStatus, setAuthStatus] = useState<'checking' | 'authorized' | 'unauthorized'>('checking');
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -34,8 +33,7 @@ export default function DashboardPage() {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
         
         if (!token) {
-          router.push('/login');
-          return;
+          throw new Error('No token found');
         }
 
         const response = await axios.get('https://hair-saloon-production.up.railway.app/auth/me', {
@@ -48,37 +46,29 @@ export default function DashboardPage() {
           throw new Error('Invalid user data received');
         }
 
-        if (response.data.user.email.toLowerCase() === 'admin@gmail.com') {
-          setIsAuthorized(true);
-        } else {
-          router.push('/');
+        if (response.data.user.email.toLowerCase() !== 'admin@gmail.com') {
+          throw new Error('Unauthorized access');
         }
+
+        setAuthStatus('authorized');
       } catch (error) {
         console.error('Authentication error:', error);
         if (typeof window !== 'undefined') {
           localStorage.removeItem('token');
         }
-        router.push('/login');
-      } finally {
-        setIsLoading(false);
+        setAuthStatus('unauthorized');
+        
+        // Immediately redirect without showing any content
+        if (error instanceof Error && error.message === 'Unauthorized access') {
+          router.replace('/404');
+        } else {
+          router.replace('/login');
+        }
       }
     };
 
     checkAuth();
   }, [router]);
-
-  if (isLoading) {
-    return (
-      <Container className="text-center py-5">
-        <Spinner animation="border" variant="primary" />
-        <p className="mt-3">Loading dashboard...</p>
-      </Container>
-    );
-  }
-
-  if (!isAuthorized) {
-    return null;
-  }
 
   const dashboardButtons: DashboardButton[] = [
     { path: '/dashboard/add-product', variant: 'primary', text: 'Add New Product' },
@@ -88,20 +78,31 @@ export default function DashboardPage() {
     { path: '/dashboard/analytics', variant: 'info', text: 'Analytics' }
   ];
 
+  if (authStatus === 'checking') {
+    return (
+      <Container className="text-center py-5">
+        <Spinner animation="border" variant="primary" />
+        <p className="mt-3">Verifying access...</p>
+      </Container>
+    );
+  }
+
+  if (authStatus === 'unauthorized') {
+    return null; // Redirect will happen in useEffect
+  }
+
   return (
     <Container className="py-5">
       <h1 className="mb-4">Admin Dashboard</h1>
       <div className="d-flex flex-wrap gap-3">
         {dashboardButtons.map((button, index) => (
-          <Button
+          <button
             key={index}
-            variant={button.variant}
-            size="lg"
+            className={`btn btn-${button.variant} btn-lg p-4`}
             onClick={() => router.push(button.path)}
-            className="p-4"
           >
             {button.text}
-          </Button>
+          </button>
         ))}
       </div>
     </Container>
