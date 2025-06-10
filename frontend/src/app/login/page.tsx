@@ -4,7 +4,7 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
-import PopupNotification from './PopupNotification'
+import PopupNotification from '../../components/PopupNotification'
 
 interface AxiosError {
     response?: {
