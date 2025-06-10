@@ -1,4 +1,3 @@
-// components/LayoutWrapper.tsx
 "use client";
 
 import { usePathname } from "next/navigation";
@@ -11,8 +10,9 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const hideNavbarFooter = 
-    ["/login", "/signup","/404"].includes(pathname)
+
+  const hideNavbarFooter =
+    ["/login", "/signup"].includes(pathname) || pathname === "/404";
 
   return (
     <>
