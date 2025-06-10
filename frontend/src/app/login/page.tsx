@@ -5,6 +5,29 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
 
+interface AxiosError {
+    response?: {
+        data: {
+            message?: string;
+            error?: string;
+            success?: boolean;
+        };
+    };
+    request?: unknown;
+    message?: string;
+}
+
+interface LoginResponse {
+    success: boolean;
+    token: string;
+    user: {
+        id: string;
+        email: string;
+        name: string;
+        // Add other user properties as needed
+    };
+}
+
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -15,7 +38,6 @@ export default function Login() {
     const [rememberMe, setRememberMe] = useState(false)
     const router = useRouter()
 
-    // Check for saved credentials on component mount
     useEffect(() => {
         const savedEmail = localStorage.getItem('rememberedemail')
         if (savedEmail) {
@@ -25,61 +47,59 @@ export default function Login() {
     }, [])
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess(false);
-    
-    if (!email || !password) {
-        setError('Please fill in all fields');
-        setLoading(false);
-        return;
-    }
-
-    try {
-        const res = await axios.post('http://localhost:5000/login', {
-            email,
-            password
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        });
+        e.preventDefault()
+        setLoading(true)
+        setError('')
+        setSuccess(false)
         
-        if (res.data.success) {
-            setSuccess(true);
-            
-            if (rememberMe) {
-                localStorage.setItem('rememberedemail', email);
-            } else {
-                localStorage.removeItem('rememberedemail');
-            }
+        if (!email || !password) {
+            setError('Please fill in all fields')
+            setLoading(false)
+            return
+        }
 
-            localStorage.setItem('authToken', res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
+        try {
+            const res = await axios.post<LoginResponse>('http://localhost:5000/login', {
+                email,
+                password
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            })
             
-            setTimeout(() => {
-                router.push('/');
-            }, 1000);
+            if (res.data.success) {
+                setSuccess(true)
+                
+                if (rememberMe) {
+                    localStorage.setItem('rememberedemail', email)
+                } else {
+                    localStorage.removeItem('rememberedemail')
+                }
+
+                localStorage.setItem('authToken', res.data.token)
+                localStorage.setItem('user', JSON.stringify(res.data.user))
+                
+                setTimeout(() => {
+                    router.push('/')
+                }, 1000)
+            }
+        } catch (err: unknown) {
+            const error = err as AxiosError
+            if (error.response) {
+                setError(error.response.data.message || 
+                        error.response.data.error || 
+                        'Login failed. Please try again.')
+            } else if (error.request) {
+                setError('No response from server. Please check your connection.')
+            } else {
+                setError('Request error: ' + (error.message || 'Unknown error'))
+            }
+        } finally {
+            setLoading(false)
         }
-    } catch (err) {
-        if (err.response) {
-            // The request was made and the server responded with a status code
-            setError(err.response.data.message || 
-                    err.response.data.error || 
-                    'Login failed. Please try again.');
-        } else if (err.request) {
-            // The request was made but no response was received
-            setError('No response from server. Please check your connection.');
-        } else {
-            // Something happened in setting up the request
-            setError('Request error: ' + err.message);
-        }
-    } finally {
-        setLoading(false);
     }
-}
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#ffb8d5] via-[#ffd6e7] to-[#ffe8f0] flex items-center justify-center p-4">
