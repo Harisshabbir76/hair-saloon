@@ -13,17 +13,19 @@ export default function AboutUs() {
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12">
-          {/* Image Section - Order changes on mobile */}
+        <div className="flex flex-col lg:flex-row items-center gap-6 md:gap-12">
+          {/* Image Section with adjusted mobile dimensions */}
           <div className="w-full lg:w-1/2 relative rounded-xl overflow-hidden shadow-2xl order-1 lg:order-none">
-            <Image
-              src={salonInterior}
-              alt="Our salon interior"
-              width={600}
-              height={400}
-              className="w-full h-auto object-cover"
-              priority
-            />
+            <div className="aspect-w-4 aspect-h-3 md:aspect-none">
+              <Image
+                src={salonInterior}
+                alt="Our salon interior"
+                width={600}
+                height={400}
+                className="w-full h-[250px] md:h-auto object-cover"
+                priority
+              />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
             <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
               <h3 className="text-xl md:text-2xl font-bold text-white">Since 2010</h3>
@@ -44,6 +46,7 @@ export default function AboutUs() {
             </p>
             
             <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+              {/* List items remain the same as before */}
               <div className="flex items-start">
                 <div className="bg-pink-500/20 p-1.5 md:p-2 rounded-full mr-3 md:mr-4 mt-0.5">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5 text-pink-600" viewBox="0 0 20 20" fill="currentColor">
