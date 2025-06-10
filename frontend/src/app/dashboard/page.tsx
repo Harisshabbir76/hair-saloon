@@ -6,6 +6,23 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Spinner, Button } from 'react-bootstrap';
 
+type ButtonVariant = 
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'light'
+  | 'dark'
+  | 'link';
+
+interface DashboardButton {
+  path: string;
+  variant: ButtonVariant;
+  text: string;
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +31,6 @@ export default function DashboardPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Safely get token from localStorage
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
         
         if (!token) {
@@ -22,19 +38,16 @@ export default function DashboardPage() {
           return;
         }
 
-        // Verify token and get user data
         const response = await axios.get('https://hair-saloon-production.up.railway.app/auth/me', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
 
-        // Validate response structure
         if (!response.data?.user?.email) {
           throw new Error('Invalid user data received');
         }
 
-        // Check if user is admin (case-insensitive)
         if (response.data.user.email.toLowerCase() === 'admin@gmail.com') {
           setIsAuthorized(true);
         } else {
@@ -42,7 +55,6 @@ export default function DashboardPage() {
         }
       } catch (error) {
         console.error('Authentication error:', error);
-        // Clear invalid token
         if (typeof window !== 'undefined') {
           localStorage.removeItem('token');
         }
@@ -65,11 +77,10 @@ export default function DashboardPage() {
   }
 
   if (!isAuthorized) {
-    return null; // Redirect will happen in useEffect
+    return null;
   }
 
-  // Dashboard buttons data for cleaner rendering
-  const dashboardButtons = [
+  const dashboardButtons: DashboardButton[] = [
     { path: '/dashboard/add-product', variant: 'primary', text: 'Add New Product' },
     { path: '/dashboard/order-management', variant: 'success', text: 'Order Management' },
     { path: '/dashboard/contactus', variant: 'info', text: 'Customer Messages' },
@@ -84,7 +95,7 @@ export default function DashboardPage() {
         {dashboardButtons.map((button, index) => (
           <Button
             key={index}
-            variant={button.variant as any}
+            variant={button.variant}
             size="lg"
             onClick={() => router.push(button.path)}
             className="p-4"
