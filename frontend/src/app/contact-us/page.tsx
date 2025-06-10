@@ -1,6 +1,6 @@
 'use client'
 
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import React, { useState } from 'react'
 import { FaInstagram, FaFacebook, FaPhone, FaMapMarkerAlt } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
@@ -50,11 +50,13 @@ export default function Contact() {
             } else {
                 setError(res.data.message || 'Error sending message')
             }
-        } catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-                setError(err.response?.data?.message || 
-                         err.response?.data?.error || 
-                         'Failed to send message. Please try again.')
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                setError(
+                    err.response?.data?.message || 
+                    err.response?.data?.error || 
+                    'Failed to send message. Please try again.'
+                )
             } else if (err instanceof Error) {
                 setError(err.message)
             } else {
