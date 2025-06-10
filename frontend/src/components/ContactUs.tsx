@@ -1,6 +1,6 @@
 'use client'
 
-import axios from 'axios'
+import axios, { isAxiosError } from 'axios'
 import React, { useState } from 'react'
 
 export default function Contact() {
@@ -50,10 +50,18 @@ export default function Contact() {
             } else {
                 setError(res.data.message || 'Error sending message')
             }
-        } catch (err) {
-            setError(err.response?.data?.message || 
-                   err.response?.data?.error || 
-                   'Failed to send message. Please try again.')
+        } catch (err: unknown) {
+            let errorMessage = 'Failed to send message. Please try again.'
+            
+            if (isAxiosError(err)) {
+                errorMessage = err.response?.data?.message || 
+                              err.response?.data?.error || 
+                              errorMessage
+            } else if (err instanceof Error) {
+                errorMessage = err.message
+            }
+            
+            setError(errorMessage)
         } finally {
             setLoading(false)
         }
@@ -101,7 +109,7 @@ export default function Contact() {
                         </label>
                         <textarea
                             id="message"
-                            rows="4"
+                            rows={4}
                             placeholder="Your message..."
                             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:border-pink-500 focus:ring-pink-500"
                             value={message}
