@@ -141,6 +141,30 @@ app.get('/logout', (req, res) => {
 
 
 
+app.get('/auth/me', async (req, res) => {
+    try {
+        const token = req.header('Authorization').replace('Bearer ', '');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.userId);
+        
+        if (!user) {
+            return res.status(404).send();
+        }
+        
+        res.send({ user });
+    } catch (error) {
+        res.status(401).send({ error: 'Please authenticate' });
+    }
+});
+
+
+
+
+
+
+
+
+
 app.post('/contact', async (req, res) => {
     const { name, email, message } = req.body;
 
