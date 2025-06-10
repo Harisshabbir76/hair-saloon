@@ -17,10 +17,31 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="antialiased flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <LayoutWithNavbarAndFooter>
+          {children}
+        </LayoutWithNavbarAndFooter>
       </body>
     </html>
+  );
+}
+
+function LayoutWithNavbarAndFooter({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // Using a client component wrapper for the conditional rendering
+  const pathname = usePathname();
+  const excludedPaths = ['/login', '/signup', '/404'];
+  const shouldShowNavAndFooter = !excludedPaths.some(path => 
+    pathname?.startsWith(path)
+  );
+
+  return (
+    <>
+      {shouldShowNavAndFooter && <Navbar />}
+      <main className="flex-grow">{children}</main>
+      {shouldShowNavAndFooter && <Footer />}
+    </>
   );
 }
