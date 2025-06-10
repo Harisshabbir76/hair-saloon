@@ -6,16 +6,11 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-[#ffb8d5] via-[#ffd6e7] to-[#ffe8f0] text-gray-800 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Salon Info - Centered on mobile */}
-        <div className="text-center md:text-left mb-8 md:mb-0">
-          <h3 className="text-2xl font-bold">Salon</h3>
-          <p className="text-lg">Your Beauty, Our Duty</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+        {/* Main content row */}
+        <div className="flex flex-col md:flex-row gap-8 justify-between">
           {/* Contact Info */}
-          <div className="space-y-4">
-            <h4 className="text-xl font-semibold text-center md:text-left">Contact Us</h4>
+          <div className="space-y-4 flex-1">
+            <h4 className="text-xl font-semibold">Contact Info</h4>
             <div className="flex items-start space-x-3">
               <FaMapMarkerAlt className="text-pink-600 text-xl mt-1" />
               <span>123 Beauty Street, Salon City</span>
@@ -28,8 +23,7 @@ export default function Footer() {
               <MdEmail className="text-pink-600 text-xl" />
               <span>contact@salon.com</span>
             </div>
-            {/* Social Icons moved here */}
-            <div className="flex justify-center md:justify-start space-x-4 pt-2">
+            <div className="flex space-x-4 pt-2">
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-800 transition-colors">
                 <FaInstagram className="text-2xl" />
               </a>
@@ -39,9 +33,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Hours */}
-          <div className="space-y-4">
-            <h4 className="text-xl font-semibold text-center md:text-left">Opening Hours</h4>
+          {/* Opening Hours */}
+          <div className="space-y-4 flex-1">
+            <h4 className="text-xl font-semibold">Opening Hours</h4>
             <div className="flex space-x-3">
               <FaClock className="text-pink-600 text-xl mt-1 flex-shrink-0" />
               <div className="space-y-1">
@@ -53,9 +47,9 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-xl font-semibold text-center md:text-left">Quick Links</h4>
-            <nav className="flex flex-col space-y-2 items-center md:items-start">
+          <div className="space-y-4 flex-1">
+            <h4 className="text-xl font-semibold">Quick Links</h4>
+            <nav className="flex flex-col space-y-2">
               <Link href="/" className="hover:text-pink-600 transition-colors">Home</Link>
               <Link href="/our-services" className="hover:text-pink-600 transition-colors">Services</Link>
               <Link href="/about-us" className="hover:text-pink-600 transition-colors">About Us</Link>
