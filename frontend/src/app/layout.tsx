@@ -1,23 +1,24 @@
-import type { Metadata } from "next";
-import { GeistSans, GeistMono } from "geist/font";
-import "./globals.css";
-import LayoutWrapper from "../components/LayoutWrapper";
+// app/layout.tsx
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { usePathname } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: "Salon - Your Beauty, Our Duty",
-  description: "Premium salon services",
-};
+// Define routes where Navbar & Footer should be hidden
+const HIDE_NAV_FOOTER_PATHS = ['/login', '/signup', '/not-found'];
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
+  const pathname = usePathname();
+  const shouldHideNavFooter = HIDE_NAV_FOOTER_PATHS.includes(pathname || '');
+
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body className="antialiased flex flex-col min-h-screen">
-        <LayoutWrapper>{children}</LayoutWrapper>
-      </body>
-    </html>
+    <>
+      {!shouldHideNavFooter && <Navbar />}
+      <main>{children}</main>
+      {!shouldHideNavFooter && <Footer />}
+    </>
   );
 }
