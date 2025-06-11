@@ -4,7 +4,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Spinner } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 type ButtonVariant = 
   | 'primary'
@@ -72,12 +72,8 @@ export default function DashboardPage() {
     { path: '/dashboard/analytics', variant: 'info', text: 'Analytics' }
   ];
 
-  if (authStatus === 'checking') {
-    return null; // Don't show anything while checking
-  }
-
-  if (authStatus === 'unauthorized') {
-    return null; // Redirect will happen in useEffect
+  if (authStatus === 'checking' || authStatus === 'unauthorized') {
+    return null; // Don't show anything while checking or if unauthorized
   }
 
   return (
