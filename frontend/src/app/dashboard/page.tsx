@@ -51,13 +51,13 @@ export default function DashboardPage() {
           setAuthStatus('authorized');
         } else {
           setAuthStatus('unauthorized');
-          router.replace('/not-found');
+          router.replace('/404');
         }
       } catch (error) {
         console.error('Authentication error:', error);
         localStorage.removeItem('token');
         setAuthStatus('unauthorized');
-        router.replace('/not-found');
+        router.replace('/404');
       }
     };
 
