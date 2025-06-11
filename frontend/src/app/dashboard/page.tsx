@@ -26,7 +26,6 @@ interface DashboardButton {
 export default function DashboardPage() {
   const router = useRouter();
   const [authStatus, setAuthStatus] = useState<'checking' | 'authorized' | 'unauthorized'>('checking');
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -36,7 +35,7 @@ export default function DashboardPage() {
         
         if (!token) {
           setAuthStatus('unauthorized');
-          router.push('/login');
+          router.replace('/not-found');
           return;
         }
 
@@ -52,15 +51,13 @@ export default function DashboardPage() {
           setAuthStatus('authorized');
         } else {
           setAuthStatus('unauthorized');
-          router.push('/');
+          router.replace('/not-found');
         }
       } catch (error) {
         console.error('Authentication error:', error);
         localStorage.removeItem('token');
         setAuthStatus('unauthorized');
-        router.push('/login');
-      } finally {
-        setIsLoading(false);
+        router.replace('/not-found');
       }
     };
 
@@ -75,13 +72,8 @@ export default function DashboardPage() {
     { path: '/dashboard/analytics', variant: 'info', text: 'Analytics' }
   ];
 
-  if (isLoading || authStatus === 'checking') {
-    return (
-      <Container className="text-center py-5">
-        <Spinner animation="border" variant="primary" />
-        <p className="mt-3">Verifying access...</p>
-      </Container>
-    );
+  if (authStatus === 'checking') {
+    return null; // Don't show anything while checking
   }
 
   if (authStatus === 'unauthorized') {
