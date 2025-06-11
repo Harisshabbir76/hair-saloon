@@ -60,9 +60,9 @@ export default function DashboardPage() {
         
         // Immediately redirect without showing any content
         if (error instanceof Error && error.message === 'Unauthorized access') {
-          router.replace('/404');
+          router.replace('/not-found');
         } else {
-          router.replace('/404');
+          router.replace('/not-found');
         }
       }
     };
