@@ -26,44 +26,41 @@ interface DashboardButton {
 export default function DashboardPage() {
   const router = useRouter();
   const [authStatus, setAuthStatus] = useState<'checking' | 'authorized' | 'unauthorized'>('checking');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        // Get token from localStorage
+        const token = localStorage.getItem('token');
         
         if (!token) {
-          throw new Error('No token found');
+          setAuthStatus('unauthorized');
+          router.push('/login');
+          return;
         }
 
-        const response = await axios.get('https://hair-saloon-production.up.railway.app/auth/me', {
+        // Verify token and get user data
+        const response = await axios.get('https://sublime-magic-production.up.railway.app/auth/me', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
 
-        if (!response.data?.user?.email) {
-          throw new Error('Invalid user data received');
+        // Check if user is admin (case-insensitive)
+        if (response.data.user.email.toLowerCase() === 'admin@gmail.com') {
+          setAuthStatus('authorized');
+        } else {
+          setAuthStatus('unauthorized');
+          router.push('/');
         }
-
-        if (response.data.user.email.toLowerCase() !== 'admin@gmail.com') {
-          throw new Error('Unauthorized access');
-        }
-
-        setAuthStatus('authorized');
       } catch (error) {
         console.error('Authentication error:', error);
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('token');
-        }
+        localStorage.removeItem('token');
         setAuthStatus('unauthorized');
-        
-        // Immediately redirect without showing any content
-        if (error instanceof Error && error.message === 'Unauthorized access') {
-          router.replace('/not-found');
-        } else {
-          router.replace('/not-found');
-        }
+        router.push('/login');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -78,7 +75,7 @@ export default function DashboardPage() {
     { path: '/dashboard/analytics', variant: 'info', text: 'Analytics' }
   ];
 
-  if (authStatus === 'checking') {
+  if (isLoading || authStatus === 'checking') {
     return (
       <Container className="text-center py-5">
         <Spinner animation="border" variant="primary" />
